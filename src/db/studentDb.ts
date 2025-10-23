@@ -1,23 +1,60 @@
-import sqlite3 from 'sqlite3';
-
+import { Student } from './entity/Student.entity';
 import type StudentInterface from '@/types/StudentInterface';
+import getRandomFio from '@/utils/getRandomFio';
+import AppDataSource from './AppDataSource';
 
-sqlite3.verbose();
+const studentRepository = AppDataSource.getRepository(Student);
 
+/**
+ * Получение студентов
+ * @returns Promise<StudentInterface[]>
+ */
 export const getStudentsDb = async (): Promise<StudentInterface[]> => {
-  const db = new sqlite3.Database(process.env.DB ?? './db/vki-web.db');
+  return await studentRepository.find();
+};
 
-  const students = await new Promise((resolve, reject) => {
-    const sql = 'SELECT * FROM student';
-    db.all(sql, [], (err, rows) => {
-      if (err) {
-        reject(err);
-        db.close();
-        return;
-      }
-      resolve(rows);
-      db.close();
-    });
+/**
+ * Удаления студента
+ * @param studentId ИД удаляемого студента
+ * @returns Promise<number>
+ */
+export const deleteStudentDb = async (studentId: number): Promise<number> => {
+  await studentRepository.delete(studentId);
+  return studentId;
+};
+
+/**
+ * Добавление студента
+ * @param studentField поля студента
+ * @returns Promise<StudentInterface>
+ */
+export const addStudentDb = async (studentFields: Omit<StudentInterface, 'id'>): Promise<StudentInterface> => {
+  const student = new Student();
+  const newStudent = await studentRepository.save({
+    ...student,
+    ...studentFields,
   });
-  return students as StudentInterface[];
+  return newStudent;
+};
+
+/**
+ * Добавление рандомных студента
+ * @param amount количество рандомных записей
+ * @returns Promise<StudentInterface>
+ */
+export const addRandomStudentsDb = async (amount: number = 10): Promise<StudentInterface[]> => {
+  const students: StudentInterface[] = [];
+
+  for (let i = 0; i < amount; i++) {
+    const fio = getRandomFio();
+
+    const newStudent = await addStudentDb({
+      ...fio,
+      contacts: 'contact',
+      groupId: 1,
+    });
+    students.push(newStudent);
+  }
+
+  return students;
 };
