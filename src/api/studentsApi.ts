@@ -1,5 +1,6 @@
 import type StudentInterface from '@/types/StudentInterface';
 
+// Получаем апи студентов
 export const getStudentsApi = async (): Promise<StudentInterface[]> => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}students`);
@@ -16,6 +17,7 @@ export const getStudentsApi = async (): Promise<StudentInterface[]> => {
   }
 };
 
+// Функция для удаления студента
 export const deleteStudentApi = async (studentId: number): Promise<number> => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}students/${studentId}`, {
@@ -33,6 +35,7 @@ export const deleteStudentApi = async (studentId: number): Promise<number> => {
   }
 };
 
+// Функция для добавления студента
 export const addStudentApi = async (student: StudentInterface): Promise<StudentInterface> => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}students`, {
