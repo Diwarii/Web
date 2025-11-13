@@ -16,11 +16,14 @@ const Students = (): React.ReactElement => {
 
   const onDeleteHandler = (studentId: number): void => {
     if (confirm('Удалить студента?')) {
+      debugger;
+      console.log('onDeleteHandler', studentId);
       deleteStudentMutate(studentId);
     }
   };
 
   const onAddHandler = (studentFormField: FormFields): void => {
+    debugger;
     console.log('Добавление студента', studentFormField);
 
     addStudentMutate({
