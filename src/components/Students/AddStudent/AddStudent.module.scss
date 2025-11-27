@@ -6,10 +6,28 @@ $width: 400px;
 
   input {
     width: calc($width - 8px);
+    height: 25px;
+    border-radius: 10px;
+    border-color: transparent;
+    background-color: #3c1361;
+    color: #bca0dc;
   }
 
   input[type=submit] {
     width: $width;
+    height: 30px;
+  }
+
+   input::placeholder {
+    color: #7c5295;
+  }
+
+  select {
+    height: 30px;
+    border-radius: 10px;
+    color: #bca0dc;
+    background-color: #3c1361;
+    border-color: transparent;
   }
 
 
