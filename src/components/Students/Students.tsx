@@ -6,6 +6,7 @@ import styles from './Students.module.scss';
 import Student from './Student/Student';
 import AddStudent, { type FormFields } from './AddStudent/AddStudent';
 import { v4 as uuidv4 } from 'uuid';
+import useGroups from '@/hooks/useGroups';
 
 const Students = (): React.ReactElement => {
   const {
@@ -14,11 +15,14 @@ const Students = (): React.ReactElement => {
     addStudentMutate,
   } = useStudents();
 
+  const { groups } = useGroups();
+
   const onDeleteHandler = (studentId: number): void => {
     if (confirm('Удалить студента?')) {
       debugger;
-      console.log('onDeleteHandler', studentId);
-      deleteStudentMutate(studentId);
+      console.log('onDeleteHandler',studentId)
+
+      deleteStudentMutate(studentId)
     }
   };
 
@@ -29,14 +33,13 @@ const Students = (): React.ReactElement => {
     addStudentMutate({
       id: -1,
       ...studentFormField,
-      groupId: 1,
       uuid: uuidv4(),
     });
   };
 
   return (
     <div className={styles.Students}>
-      <AddStudent onAdd={onAddHandler} />
+      <AddStudent onAdd={onAddHandler} groups={groups} />
 
       {students.map((student: StudentInterface) => (
         <Student
